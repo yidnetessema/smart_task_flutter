@@ -63,5 +63,3 @@ To run the app on an emulator or connected device:
 
 ## Contact
 For any inquiries, feel free to reach out via yidnekachewtessema367@gmail.com.
-
->>>>>>> fae46ecefbef58f10eb0d975b51aeeae006b5cba
