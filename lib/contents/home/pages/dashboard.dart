@@ -103,6 +103,7 @@ class _DashboardPageState extends State<DashboardPage> with TickerProviderStateM
       body: BlocBuilder<AppCubits, AppCubitStates>(
         builder: (context, state) {
           return Scaffold(
+            backgroundColor: backgroundColor,
             body: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(

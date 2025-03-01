@@ -59,11 +59,6 @@ class TaskBoardScreen extends State<IssuePage>
       List<int> gender, List<int> category, List<int> brand, int sortByValue) {
     setState(() {
       selectedTaskPriority = gender;
-      // selectedCategoryChoices = category;
-      // selectedBrandChoices = brand;
-      // sortBy = sortByValue;
-      // itemPage = 0;
-      // itemFuture = getItems();
     });
   }
 
