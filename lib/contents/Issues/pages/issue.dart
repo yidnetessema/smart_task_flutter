@@ -84,14 +84,17 @@ class TaskBoardScreen extends State<IssuePage>
         backgroundColor: backgroundColor,
         title: Row(
           children: [
-            Icon(Icons.arrow_back, color: theme.colorScheme.secondary),
-            SizedBox(width: 8),
+            Icon(
+                Icons.arrow_back, 
+                color: theme.colorScheme.secondary
+            ),
+            SizedBox(width: AppLayout.getWidth(8)),
             Text("Tasks",
                 style: theme.textTheme.titleLarge?.copyWith(
                   color: theme.colorScheme.secondary
                 )
             ),
-            Spacer(),
+            const Spacer(),
             InkWell(
                 onTap: () {
                   showModalBottomSheet(
@@ -108,8 +111,11 @@ class TaskBoardScreen extends State<IssuePage>
                 },
                 child: Icon(Icons.filter_list, color: Colors.grey)
             ),
-            SizedBox(width: 8),
-            Icon(Icons.more_vert, color: Colors.grey),
+            SizedBox(width: AppLayout.getWidth(8)),
+            const Icon(
+                Icons.more_vert,
+                color: Colors.grey
+            ),
           ],
         ),
         elevation: 0,
@@ -126,11 +132,11 @@ class TaskBoardScreen extends State<IssuePage>
                   BorderSide(width: 2.0, color: theme.colorScheme.primary),
               insets: const EdgeInsets.symmetric(),
             ),
-            tabs: [
-              Tab(text: 'Board'),
-              Tab(text: 'Forms'),
-              Tab(text: 'Timeline'),
-              Tab(text: 'Settings'),
+            tabs: const [
+             Tab(text: 'Board'),
+             Tab(text: 'Forms'),
+             Tab(text: 'Timeline'),
+             Tab(text: 'Settings'),
             ],
           ),
           if(_tabController.index == 0)...[
@@ -138,9 +144,9 @@ class TaskBoardScreen extends State<IssuePage>
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
-                  TaskColumn(title: 'TO DO', count: 0,theme: theme),
-                  TaskColumn(title: 'IN PROGRESS', count: 2,theme: theme),
-                  TaskColumn(title: 'DONE', count: 5,theme: theme),
+                  TaskColumn(title: 'TO DO', count: 0),
+                  TaskColumn(title: 'IN PROGRESS', count: 2),
+                  TaskColumn(title: 'DONE', count: 5),
                 ],
               ),
             ),
@@ -155,9 +161,8 @@ class TaskBoardScreen extends State<IssuePage>
 class TaskColumn extends StatefulWidget {
   final String title;
   final int count;
-  final ThemeData theme;
 
-  TaskColumn({required this.title, required this.count,required this.theme});
+  TaskColumn({required this.title, required this.count});
 
   @override
   State<TaskColumn> createState() => _TaskColumnPage();
@@ -175,6 +180,8 @@ class _TaskColumnPage extends State<TaskColumn> {
 
   late Future<TaskModel> tasks;
 
+  late ThemeData theme;
+
   Future<TaskModel> loadTask() async {
     // await Future.delayed(const Duration(seconds: 1));
     return await Get.find<TaskController>().getTasks(0, 10, 'ALL', 'ALL', '');
@@ -189,15 +196,15 @@ class _TaskColumnPage extends State<TaskColumn> {
   @override
   Widget build(BuildContext context) {
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
-
+    theme = AppTheme.getTheme(context);
     return SafeArea(
+
         child: Container(
       width: MediaQuery.of(context).size.width * 0.75,
       height: MediaQuery.of(context).size.height * 0.50,
       margin: const EdgeInsets.only(bottom: 60, left: 10, right: 10, top: 10),
       decoration: BoxDecoration(
-        // color: Colors.grey[100],
-        color: widget.theme.colorScheme.primaryContainer,
+        color: theme.colorScheme.primaryContainer,
         borderRadius: BorderRadius.circular(8),
       ),
       padding: const EdgeInsets.all(12),
@@ -207,7 +214,11 @@ class _TaskColumnPage extends State<TaskColumn> {
           Row(
             children: [
               Text('${widget.title}  ${widget.count}',
-                  style: TextStyle(fontWeight: FontWeight.bold)),
+                  // style: TextStyle(fontWeight: FontWeight.bold),
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold
+                  ),
+              ),
               Spacer(),
               GestureDetector(
                 onTap: () {
@@ -239,9 +250,9 @@ class _TaskColumnPage extends State<TaskColumn> {
                       width: 60,
                       decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(Radius.circular(8)),
-                          color: widget.theme.scaffoldBackgroundColor),
+                          color: theme.scaffoldBackgroundColor),
                       child: SpinKitThreeBounce(
-                        color: widget.theme.colorScheme.primary,
+                        color: theme.colorScheme.primary,
                         size: 20.0,
                       ),
                     ),
@@ -286,15 +297,20 @@ class _TaskColumnPage extends State<TaskColumn> {
                         children: [
                           Icon(FluentSystemIcons.ic_fluent_warning_regular,
                               size: 30,
-                              color: widget.theme.colorScheme.onSecondary),
-                          SizedBox(height: 10),
+                              color: theme.colorScheme.onSecondary),
+                          SizedBox(height: AppLayout.getHeight(10)),
                           Text('No tasks yet!',
-                              style:
-                              TextStyle(fontWeight: FontWeight.bold)),
+                                style: theme.textTheme.titleSmall?.copyWith(
+                                  fontWeight: FontWeight.bold
+                                ),
+                          ),
                           SizedBox(height: 10),
                           Text('Create a task to get started.',
                               textAlign: TextAlign.center,
-                              style: TextStyle(fontSize: 12)),
+                              style: theme.textTheme.titleSmall?.copyWith(
+                                fontSize: 12
+                              ),
+                          ),
                           SizedBox(height: 10),
                           TextButton.icon(
                             onPressed: () {
@@ -302,9 +318,18 @@ class _TaskColumnPage extends State<TaskColumn> {
                                 isOnAdd = true;
                               });
                             },
-                            icon: Icon(Icons.add, color: Colors.blue),
-                            label: Text('Create',
-                                style: TextStyle(color: Colors.blue)),
+                            icon: Icon(
+                                Icons.add,
+                                color: theme.colorScheme.primary
+                            ),
+                            label: Text(
+                              'Create',
+                              style: theme.textTheme.headlineMedium?.copyWith(
+                                color: theme.colorScheme.primary
+                              )
+
+                              // style: TextStyle(color: Colors.blue),
+                            ),
                           )
                         ],
                       ),
@@ -327,9 +352,9 @@ class _TaskColumnPage extends State<TaskColumn> {
                                 CrossAxisAlignment.start,
                                 children: [
                                   TextFormField(
-                                    style: widget.theme.textTheme.labelMedium
+                                    style: theme.textTheme.labelMedium
                                         ?.copyWith(
-                                        color: widget.theme
+                                        color: theme
                                             .colorScheme.secondary),
                                     enabled: taskController
                                         .sendingProgressStatus ==
@@ -338,29 +363,29 @@ class _TaskColumnPage extends State<TaskColumn> {
                                     taskController.titleController,
                                     decoration: InputDecoration(
                                       hintText: "Task Name",
-                                      hintStyle: widget.theme
+                                      hintStyle: theme
                                           .textTheme.displaySmall
                                           ?.copyWith(
-                                          color: widget.theme.colorScheme
+                                          color: theme.colorScheme
                                               .onSecondary),
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               style: BorderStyle.solid,
-                                              color: widget.theme.colorScheme.surface),
+                                              color: theme.colorScheme.surface),
                                           borderRadius: BorderRadius
                                               .all(Radius.circular(
                                               AppLayout.getHeight(
                                                   10)))),
                                       enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: widget.theme.colorScheme.surface),
+                                              color: theme.colorScheme.surface),
                                           borderRadius: BorderRadius
                                               .all(Radius.circular(
                                               AppLayout.getHeight(
                                                   10)))),
                                       focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: widget.theme.colorScheme.surface),
+                                              color: theme.colorScheme.surface),
                                           borderRadius: BorderRadius
                                               .all(Radius.circular(
                                               AppLayout.getHeight(
@@ -392,7 +417,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                                         Icons.task_outlined,
                                         size: 22,
                                         color:
-                                        widget.theme.colorScheme.onPrimary,
+                                        theme.colorScheme.onPrimary,
                                       ),
                                       isDense: true,
                                       contentPadding:
@@ -422,10 +447,10 @@ class _TaskColumnPage extends State<TaskColumn> {
                                       value: selectedTaskPriority,
                                       hint: Text(
                                         'Task Priority',
-                                        style: widget.theme
+                                        style: theme
                                             .textTheme.labelMedium
                                             ?.copyWith(
-                                            color: widget.theme.colorScheme
+                                            color: theme.colorScheme
                                                 .onSecondary),
                                       ),
                                       items: taskPriority
@@ -434,10 +459,10 @@ class _TaskColumnPage extends State<TaskColumn> {
                                           value: priority,
                                           child: Text(
                                             priority,
-                                            style: widget.theme
+                                            style: theme
                                                 .textTheme.labelMedium
                                                 ?.copyWith(
-                                                color: widget.theme
+                                                color: theme
                                                     .colorScheme
                                                     .secondary),
                                           ),
@@ -465,32 +490,32 @@ class _TaskColumnPage extends State<TaskColumn> {
                                             horizontal: 0.0),
                                         prefixIcon: Icon(
                                           Icons.priority_high,
-                                          color: widget.theme
+                                          color: theme
                                               .colorScheme.onPrimary,
                                         ),
-                                        hintStyle: widget.theme
+                                        hintStyle: theme
                                             .textTheme.labelMedium
                                             ?.copyWith(
-                                            color: widget.theme.colorScheme
+                                            color: theme.colorScheme
                                                 .onSecondary),
                                         border: OutlineInputBorder(
                                             borderSide: BorderSide(
                                                 style: BorderStyle.solid,
-                                                color: widget.theme.colorScheme.surface),
+                                                color: theme.colorScheme.surface),
                                             borderRadius: BorderRadius
                                                 .all(Radius.circular(
                                                 AppLayout.getHeight(
                                                     10)))),
                                         enabledBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: widget.theme.colorScheme.surface),
+                                                color: theme.colorScheme.surface),
                                             borderRadius: BorderRadius
                                                 .all(Radius.circular(
                                                 AppLayout.getHeight(
                                                     10)))),
                                         focusedBorder: OutlineInputBorder(
                                             borderSide: BorderSide(
-                                                color: widget.theme.colorScheme.surface),
+                                                color: theme.colorScheme.surface),
                                             borderRadius: BorderRadius
                                                 .all(Radius.circular(
                                                 AppLayout.getHeight(
@@ -520,7 +545,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                                           fontSize: 12,
                                         ),
                                       ),
-                                      dropdownColor: widget.theme
+                                      dropdownColor: theme
                                           .colorScheme.primaryContainer,
                                       validator: taskController
                                           .validateTaskPriority,
@@ -537,37 +562,37 @@ class _TaskColumnPage extends State<TaskColumn> {
                                         enabled: taskController
                                             .sendingProgressStatus ==
                                             0,
-                                        style: widget.theme
+                                        style: theme
                                             .textTheme.labelMedium
                                             ?.copyWith(
-                                            color: widget.theme.colorScheme
+                                            color: theme.colorScheme
                                                 .secondary),
                                         decoration: InputDecoration(
                                           hintText: "Due Date",
-                                          hintStyle: widget.theme
+                                          hintStyle: theme
                                               .textTheme.displaySmall
                                               ?.copyWith(
-                                              color: widget.theme
+                                              color: theme
                                                   .colorScheme
                                                   .onSecondary),
                                           border: OutlineInputBorder(
                                               borderSide: BorderSide(
                                                   style: BorderStyle.solid,
-                                                  color: widget.theme.colorScheme.surface),
+                                                  color: theme.colorScheme.surface),
                                               borderRadius: BorderRadius
                                                   .all(Radius.circular(
                                                   AppLayout.getHeight(
                                                       10)))),
                                           enabledBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: widget.theme.colorScheme.surface),
+                                                  color: theme.colorScheme.surface),
                                               borderRadius: BorderRadius
                                                   .all(Radius.circular(
                                                   AppLayout.getHeight(
                                                       10)))),
                                           focusedBorder: OutlineInputBorder(
                                               borderSide: BorderSide(
-                                                  color: widget.theme.colorScheme.surface),
+                                                  color: theme.colorScheme.surface),
                                               borderRadius: BorderRadius
                                                   .all(Radius.circular(
                                                   AppLayout.getHeight(
@@ -603,7 +628,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                                             Icons
                                                 .calendar_today_outlined,
                                             size: 22,
-                                            color: widget.theme
+                                            color: theme
                                                 .colorScheme.onPrimary,
                                           ),
                                           isDense: true,
@@ -628,9 +653,9 @@ class _TaskColumnPage extends State<TaskColumn> {
                                       height: AppLayout.getHeight(20)),
                                   TextFormField(
                                     maxLines: 5,
-                                    style: widget.theme.textTheme.labelMedium
+                                    style: theme.textTheme.labelMedium
                                         ?.copyWith(
-                                        color: widget.theme
+                                        color: theme
                                             .colorScheme.secondary),
                                     enabled: taskController
                                         .sendingProgressStatus ==
@@ -639,10 +664,10 @@ class _TaskColumnPage extends State<TaskColumn> {
                                         .descriptionController,
                                     decoration: InputDecoration(
                                       hintText: "Description",
-                                      hintStyle: widget.theme
+                                      hintStyle: theme
                                           .textTheme.displaySmall
                                           ?.copyWith(
-                                          color: widget.theme.colorScheme
+                                          color: theme.colorScheme
                                               .onSecondary),
                                       alignLabelWithHint: true,
                                       contentPadding:
@@ -655,21 +680,21 @@ class _TaskColumnPage extends State<TaskColumn> {
                                       border: OutlineInputBorder(
                                           borderSide: BorderSide(
                                               style: BorderStyle.solid,
-                                              color: widget.theme.colorScheme.surface),
+                                              color: theme.colorScheme.surface),
                                           borderRadius: BorderRadius
                                               .all(Radius.circular(
                                               AppLayout.getHeight(
                                                   10)))),
                                       enabledBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: widget.theme.colorScheme.surface),
+                                              color: theme.colorScheme.surface),
                                           borderRadius: BorderRadius
                                               .all(Radius.circular(
                                               AppLayout.getHeight(
                                                   10)))),
                                       focusedBorder: OutlineInputBorder(
                                           borderSide: BorderSide(
-                                              color: widget.theme.colorScheme.surface),
+                                              color: theme.colorScheme.surface),
                                           borderRadius: BorderRadius
                                               .all(Radius.circular(
                                               AppLayout.getHeight(
@@ -703,7 +728,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                                         child: Icon(
                                           Icons.description_outlined,
                                           size: 22,
-                                          color: widget.theme
+                                          color: theme
                                               .colorScheme.onPrimary,
                                         ),
                                       ),
@@ -745,14 +770,14 @@ class _TaskColumnPage extends State<TaskColumn> {
                         vertical: AppLayout.getHeight(5)),
                     decoration: BoxDecoration(
                         color:
-                        widget.theme.colorScheme.primaryContainer),
+                        theme.colorScheme.primaryContainer),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
                         TextButton(
                           style: ButtonStyle(
                               backgroundColor:
-                              MaterialStateProperty.all(widget.theme
+                              MaterialStateProperty.all(theme
                                   .colorScheme.onSecondary
                                   .withOpacity(0.3)),
                               padding: MaterialStateProperty.all<
@@ -775,10 +800,10 @@ class _TaskColumnPage extends State<TaskColumn> {
                             children: [
                               Text(
                                 "Cancel",
-                                style: widget.theme
+                                style: theme
                                     .textTheme.headlineSmall!
                                     .copyWith(
-                                    color: widget.theme.colorScheme
+                                    color: theme.colorScheme
                                         .onSecondary),
                               )
                             ],
@@ -798,7 +823,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                           style: ButtonStyle(
                               backgroundColor:
                               MaterialStateProperty.all(
-                                  widget.theme.colorScheme.primary),
+                                  theme.colorScheme.primary),
                               padding: MaterialStateProperty.all<
                                   EdgeInsets>(
                                 EdgeInsets.only(
@@ -827,7 +852,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                               )
                                   : Text(
                                 "Save",
-                                style: widget.theme.textTheme
+                                style: theme.textTheme
                                     .headlineSmall!
                                     .copyWith(
                                     color:
@@ -875,7 +900,7 @@ class _TaskColumnPage extends State<TaskColumn> {
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            primaryColor: widget.theme.colorScheme.primary,
+            primaryColor: theme.colorScheme.primary,
             // Header background color
             scaffoldBackgroundColor: Colors.black,
             // Background color of the picker
@@ -911,10 +936,10 @@ class _TaskColumnPage extends State<TaskColumn> {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(bottom: 16),
         decoration: BoxDecoration(
-          color: widget.theme.colorScheme.primaryContainer,
+          color: theme.colorScheme.primaryContainer,
           borderRadius: BorderRadius.circular(16),
           border: Border.all(
-            color: widget.theme.colorScheme.surface, // Border color
+            color: theme.colorScheme.surface, // Border color
             width: 0.5, // Border thickness
           ),
         ),
@@ -926,7 +951,7 @@ class _TaskColumnPage extends State<TaskColumn> {
               height: 55,
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: widget.theme.colorScheme.onSecondary,
+                color: theme.colorScheme.onSecondary,
                 borderRadius: BorderRadius.circular(12),
 
               ),
@@ -941,7 +966,7 @@ class _TaskColumnPage extends State<TaskColumn> {
                       //   fontWeight: FontWeight.bold,
                       //   color: Colors.white,
                       // ),
-                      style: widget.theme.textTheme.bodyLarge?.copyWith(
+                      style: theme.textTheme.bodyLarge?.copyWith(
                         fontSize: 20
                       ),
                     ),
@@ -963,8 +988,8 @@ class _TaskColumnPage extends State<TaskColumn> {
                     //   fontWeight: FontWeight.bold,
                     //   color: Colors.white,
                     // ),
-                    style: widget.theme.textTheme.headlineMedium?.copyWith(
-                      color: widget.theme.colorScheme.secondary
+                    style: theme.textTheme.headlineMedium?.copyWith(
+                      color: theme.colorScheme.secondary
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -974,8 +999,8 @@ class _TaskColumnPage extends State<TaskColumn> {
                     //   fontSize: 14,
                     //   color: Colors.white70,
                     // ),
-                    style: widget.theme.textTheme.headlineSmall?.copyWith(
-                        color: widget.theme.colorScheme.onSecondary
+                    style: theme.textTheme.headlineSmall?.copyWith(
+                        color: theme.colorScheme.onSecondary
                     ),
                   ),
 
@@ -989,8 +1014,8 @@ class _TaskColumnPage extends State<TaskColumn> {
             //   color: theme.colorScheme.onSecondary,
             // ),
             PopupMenuButton<String>(
-              color: widget.theme.colorScheme.primaryContainer,
-              icon:  Icon(Icons.more_vert, color: widget.theme.colorScheme.onSecondary),
+              color: theme.colorScheme.primaryContainer,
+              icon:  Icon(Icons.more_vert, color: theme.colorScheme.onSecondary),
               onSelected: (value) async {
 
                 int id = int.parse(value.split("-")[0]);
@@ -1026,8 +1051,8 @@ class _TaskColumnPage extends State<TaskColumn> {
                   value: "${task.id!}-edit",
                   child:  Text(
                       "Edit",
-                      style: widget.theme.textTheme.labelLarge?.copyWith(
-                        color: widget.theme.colorScheme.secondary
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.secondary
                       ),
 
                   ),
@@ -1036,8 +1061,8 @@ class _TaskColumnPage extends State<TaskColumn> {
                   value: "${task.id!}-delete",
                   child:  Text(
                       "Delete",
-                    style: widget.theme.textTheme.labelLarge?.copyWith(
-                        color: widget.theme.colorScheme.secondary
+                    style: theme.textTheme.labelLarge?.copyWith(
+                        color: theme.colorScheme.secondary
                     ),
                   ),
                 ),
