@@ -78,10 +78,10 @@ class TaskBoardScreen extends State<IssuePage>
 
     bool isIOS = Theme.of(context).platform == TargetPlatform.iOS;
     Color backgroundColor = theme.scaffoldBackgroundColor;
-
     return Scaffold(
       backgroundColor: backgroundColor,
       appBar: AppBar(
+        backgroundColor: backgroundColor,
         title: Row(
           children: [
             Icon(Icons.arrow_back, color: theme.colorScheme.secondary),
