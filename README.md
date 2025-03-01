@@ -37,7 +37,7 @@ Smart Task Flutter is a task management application built using Flutter. It help
 
 ### Clone the Repository
 ```sh
- git clone https://github.com/YOUR_GITHUB_USERNAME/smart-task-flutter.git
+ git clone https://github.com/yidnetessema/smart_task_flutter.git
  cd smart-task-flutter
 ```
 
@@ -63,5 +63,3 @@ To run the app on an emulator or connected device:
 
 ## Contact
 For any inquiries, feel free to reach out via yidnekachewtessema367@gmail.com.
-
->>>>>>> fae46ecefbef58f10eb0d975b51aeeae006b5cba
